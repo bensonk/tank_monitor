@@ -2,8 +2,15 @@ char incomingByte = 0;
 
 void setup() {
   Serial.begin(9600);
-  for(int i = 2; i <= 5; i++)
+  for(int i = 2; i <= 6; i++)
     pinMode(i, OUTPUT);
+  
+  // Pin 6 is the radio -- we're turning it on permanently here. 
+  digitalWrite(6, HIGH);
+  
+  // Set the LED array to zero. If we never hear from the other
+  // end, we show emptiness. 
+  updateLEDs('0');
 }
 
 void updateLEDs(char b) {
@@ -16,15 +23,10 @@ void updateLEDs(char b) {
 }
 
 void loop() {
-    if (Serial.available() > 0) {
-    // read the incoming byte:
+  if (Serial.available() > 0) {
     incomingByte = Serial.read();
     if(incomingByte <= '9' && incomingByte >= '0')
       incomingByte = incomingByte - '0';
-
-    // say what you got:
-    Serial.print("Received: ");
-    Serial.println(incomingByte, BIN);
     updateLEDs(incomingByte);
   }
 }
