@@ -1,3 +1,15 @@
+/* * * * * * * * * * * * * * * *\
+ * Tank Monitor: Receiver
+ *
+ * This is the code that runs 
+ * on the display unit, listening
+ * for a signal from the unit at
+ * the tank.
+ *
+ * Benson Kalahar
+ * July 2011
+\* * * * * * * * * * * * * * * */
+
 char incomingByte = 0;
 
 void setup() {
@@ -14,8 +26,6 @@ void setup() {
 }
 
 void updateLEDs(char b) {
-  // Some shortcuts if you're typing directly into the terminal: 
-  // 1: a, 2: c, 3: g, 4: o
   digitalWrite(2, B0001 & b);
   digitalWrite(3, B0010 & b);
   digitalWrite(4, B0100 & b);
@@ -23,10 +33,8 @@ void updateLEDs(char b) {
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    incomingByte = Serial.read();
-    if(incomingByte <= '9' && incomingByte >= '0')
-      incomingByte = incomingByte - '0';
-    updateLEDs(incomingByte);
-  }
+  if (Serial.available() > 0)
+    updateLEDs(Serial.read());
+  else
+    delay(250);
 }

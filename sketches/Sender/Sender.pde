@@ -1,15 +1,15 @@
-/* * * * * * * * * * * * * * * *
- * Tank Monitor
+/* * * * * * * * * * * * * * * *\
+ * Tank Monitor: Sender
  *
  * This is the code that runs 
  * at the site of the tank, 
  * monitoring float switches.
  *
- * Benson Kalar
+ * Benson Kalahar
  * July 2011
- * * * * * * * * * * * * * * * */
+\* * * * * * * * * * * * * * * */
 
-int cycleTimeSeconds = 5;
+int cycleTimeSeconds = 1;
 
 void setup() {
   Serial.begin(9600);
@@ -36,17 +36,17 @@ void setup() {
 int read_value() {
   digitalWrite(13, HIGH);
   int inputs = 0;
-  inputs += !digitalRead(2);
-  inputs += !digitalRead(3);
-  inputs += !digitalRead(4);
-  inputs += !digitalRead(5);
+  inputs += digitalRead(2) * 0b0001;
+  inputs += digitalRead(3) * 0b0010;
+  inputs += digitalRead(4) * 0b0100;
+  inputs += digitalRead(5)
+  * 0b1000;
   digitalWrite(13, LOW);
   return inputs;
-}  
+}
 
 void loop() {
   int val = read_value();
-  Serial.print("Read values:");
-  Serial.println(val);
+  Serial.write(96 + val);
   delay(1000 * cycleTimeSeconds);
 }
