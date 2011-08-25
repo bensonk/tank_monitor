@@ -9,7 +9,7 @@
  * July 2011
 \* * * * * * * * * * * * * * * */
 
-int cycleTimeSeconds = 1;
+int cycleTimeSeconds = 2;
 
 void setup() {
   Serial.begin(9600);
@@ -33,20 +33,36 @@ void setup() {
   digitalWrite(13, LOW);
 }
 
+void sleep(int secs) {
+  delay(secs*1000);
+}
+
+void send_byte(byte b) {
+  digitalWrite(6, HIGH);
+  delay(35); // Let the radio start up
+  Serial.begin(9600);
+  for(int i = 0; i < 10; i++)
+    Serial.write(b);
+  delay(20); // Let the radio finish sending
+  digitalWrite(6, LOW);
+}
+
 int read_value() {
   digitalWrite(13, HIGH);
   int inputs = 0;
   inputs += digitalRead(2) * 0b0001;
   inputs += digitalRead(3) * 0b0010;
   inputs += digitalRead(4) * 0b0100;
-  inputs += digitalRead(5)
-  * 0b1000;
+  inputs += digitalRead(5) * 0b1000;
   digitalWrite(13, LOW);
   return inputs;
 }
 
 void loop() {
   int val = read_value();
-  Serial.write(96 + val);
-  delay(1000 * cycleTimeSeconds);
+  send_byte(96+val);
+  sleep(cycleTimeSeconds);
 }
+
+
+
