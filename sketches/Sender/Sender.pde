@@ -11,7 +11,7 @@
 
 // CYCLE_TIME defines how long we sleep between measurements.
 // Values are in seconds.
-#define CYCLE_TIME 60
+#define CYCLE_TIME 15
 
 #include <avr/sleep.h>
 #include <avr/wdt.h>
@@ -91,10 +91,10 @@ void send_byte(byte b) {
 int read_value() {
   digitalWrite(13, HIGH);
   int inputs = 0;
-  inputs += digitalRead(2) * 0b0001;
-  inputs += digitalRead(3) * 0b0010;
-  inputs += digitalRead(4) * 0b0100;
-  inputs += digitalRead(5) * 0b1000;
+  inputs += (!digitalRead(2)) * 0b0001;
+  inputs += (!digitalRead(3)) * 0b0010;
+  inputs += (!digitalRead(4)) * 0b0100;
+  inputs += (!digitalRead(5)) * 0b1000;
   digitalWrite(13, LOW);
   return inputs;
 }
